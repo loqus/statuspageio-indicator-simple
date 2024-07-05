@@ -1,0 +1,13 @@
+.statusindicator {
+    width: 16px;
+    height: 16px;
+    display: block;
+    margin-top: 3px;
+    margin-right: 3px;
+}
+.circle {
+    border-radius: 50%;
+}
+.bg-green {
+    background-color: #48BB78;
+}
