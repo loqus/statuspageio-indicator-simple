@@ -1,0 +1,20 @@
+.statusindicator {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+.circle {
+    border-radius: 50%;
+}
+.bg-green {
+    background-color: #48BB78;
+}
+.bg-red-500 {
+  background-color: #F56565;
+}
+.bg-orange-500 {
+  background-color: #ED8936;
+}
+.bg-gray-500 {
+  background-color: #A0AEC0;
+}
