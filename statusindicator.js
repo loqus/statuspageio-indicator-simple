@@ -4,43 +4,44 @@
 
     var RENDER_EVENT = "systemStatus:render";
 
-    window.SystemStatus = {
-        initialize: function(options) {
-            this.options = Object.assign({}, options);
-            this.el = options.el;
-            this.getStatus().then(this.render.bind(this));
-        },
-        getStatus: function() {
-            var url = `https://status.domainname.com/api/v2/status.json`;
-            return fetch(url)
-                .then(response => response.json())
-                .then(data => data.status);
-        },
-        render: function(status) {
-            var indicatorClass = {
-                "critical": "bg-red",
-                "major": "bg-orange",
-                "minor": "bg-orange",
-                "none": "bg-green"
-            }[status.indicator] || "bg-gray";
+    function SystemStatus(options) {
+        this.options = Object.assign({}, SystemStatus.defaults, options);
+        this.el = options.el;
+        this.getStatus().then(this.render.bind(this));
+    }
 
-            var html = `
-                <span class="statusindicator ${indicatorClass} circle"></span>
-            `;
-
-            this.el.innerHTML = html.trim();
-            this.triggerEvent(RENDER_EVENT, { relatedTarget: this.el });
-        },
-        triggerEvent: function(eventName, detail) {
-            var event = new CustomEvent(eventName, { detail });
-            this.el.dispatchEvent(event);
-        }
+    SystemStatus.defaults = {
+        subdomain: "status.domainname.com"
     };
 
-    window.addEventListener("load", function() {
+    SystemStatus.prototype.getStatus = function() {
+        var url = `https://${this.options.subdomain}/api/v2/status.json`;
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => data.status);
+    };
+
+    SystemStatus.prototype.render = function(status) {
+        var indicatorClass = {
+            "critical": "bg-red-500",
+            "major": "bg-orange-500",
+            "minor": "bg-orange-500",
+            "none": "bg-green-500"
+        }[status.indicator] || "bg-gray-500";
+
+        var html = `<span class="statusindicator ${indicatorClass} circle"></span>`;
+
+        this.el.innerHTML = html.trim();
+        this.triggerEvent(RENDER_EVENT, { relatedTarget: this.el });
+    };
+
+    SystemStatus.prototype.triggerEvent = function(eventName, detail) {
+        var event = new CustomEvent(eventName, { detail });
+        this.el.dispatchEvent(event);
+    };
+
         document.querySelectorAll("[data-element=\"system-status\"]").forEach(function(el) {
-            new window.SystemStatus({ el });
+            new SystemStatus({ el });
         });
-    });
 })();
 </script>
