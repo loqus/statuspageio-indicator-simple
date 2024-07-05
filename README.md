@@ -1,3 +1,5 @@
+statuspage.io indicator script. Change (sub)domains and it should work
+
 Add
 ```
 <div data-element="system-status"></div>
